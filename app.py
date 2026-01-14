@@ -17,7 +17,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 col1, col2 = st.columns([2.5, 1.5])
 
 with col1:
-    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model. Don’t have one? Download a sample from the right.", type=["csv"])
+    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model. Don’t have one? Download a sample from the right.", type=None)
 
 with col2:
 
@@ -36,6 +36,10 @@ with col2:
 
 # if file is uploaded, show dropdowns
 if uploaded_file:
+
+    if uploaded_file and not uploaded_file.name.endswith(".csv"):
+        st.error("Please upload a CSV file")
+        st.stop()
 
     if uploaded_file.size == 0:
         st.error("❌ Uploaded file is empty. Please upload a valid CSV.")
@@ -67,8 +71,8 @@ if uploaded_file:
 
     model_paths = {
     "Logistic Regression": "saved_models/logistic_model.pkl",
-    "Decision Tree Classifier": "",
-    "K-Nearest Neighbor Classifier": "",
+    "Decision Tree Classifier": "saved_models/decision_tree_model.pkl",
+    "K-Nearest Neighbor Classifier": "saved_models/knn_model.pkl",
     "Naive Bayes Classifier - Gaussian": "",
     "Random Forest": "",
     "XGBoost": "",
