@@ -1,104 +1,128 @@
-import streamlit as st
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
+import streamlit as st
+import joblib
+from sklearn.metrics import (accuracy_score, roc_auc_score, precision_score, 
+                             recall_score, f1_score, matthews_corrcoef,   confusion_matrix)
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 st.set_page_config(page_title="My First Streamlit App", layout="centered")
 
 st.title("🫀 Heart Disease Risk Prediction")
 st.subheader("Different ML Model Performance Comparison")
 
-# define features with numerical and categorical values
-numerical_cols = [ 'age', 'resting_blood_pressure', 'cholestoral', 'Max_heart_rate', 'oldpeak' ]
-categorical_cols = [ 'sex', 'chest_pain_type', 'fasting_blood_sugar', 'rest_ecg', 'exercise_induced_angina', 'slope', 'vessels_colored_by_flourosopy', 'thalassemia' ]
+st.markdown("<br>", unsafe_allow_html=True) 
 
-# load CSV file uploaded in google drive
-@st.cache_data
-def load_data():
-    file_id = "1AnHrT9-13EI9lJgCg-6i_A-YQVP2dTka"
-    url = f"https://drive.google.com/uc?id={file_id}&export=download"
-    df = pd.read_csv(url)
-    # Shuffle the data
-    df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-    return df
+# upload test.csv file and download options
+col1, col2 = st.columns([2.5, 1.5])
 
-# define preprocessor to scale and encode the features and split the dataset
-@st.cache_data
-def prepare_data(df):
-    TARGET_COLUMN = "target"
-    X = df.drop(columns=[TARGET_COLUMN])
-    y = df[TARGET_COLUMN]
+with col1:
+    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model. Don’t have one? Download a sample from the right.", type=["csv"])
 
-    # Preprocessing
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", StandardScaler(), numerical_cols),
-            ("cat", OneHotEncoder(handle_unknown="ignore", sparse_output=False), categorical_cols)
-        ]
+with col2:
+
+    file_path = "test_data/test_data_without_target.csv"
+
+    with open(file_path, "rb") as f:
+        csv_data = f.read()
+
+    st.download_button(
+        label="⬇️ Download Test CSV",
+        data=csv_data,
+        file_name="test_dataset_without_target.csv",
+        mime="text/csv"
     )
 
-    # Train-test split (VERY IMPORTANT: stratify)
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.2,
-        random_state=42,
-        stratify=y
-    )
 
-    return X_train, X_test, y_train, y_test, preprocessor
+# if file is uploaded, show dropdowns
+if uploaded_file:
 
-df = load_data()
-X_train, X_test, y_train, y_test, preprocessor = prepare_data(df)
+    if uploaded_file.size == 0:
+        st.error("❌ Uploaded file is empty. Please upload a valid CSV.")
+        st.stop()
 
-# Dropdowns
-model_choice = st.selectbox(
-    "Select a Machine Learning Model",
-    (
-        "Logistic Regression",
-        "Decision Tree Classifier",
-        "K-Nearest Neighbor Classifier",
-        "Naive Bayes Classifier - Gaussian",
-        "Ensemble Model - Random Forest",
-        "Ensemble Model - XGBoost"
-    )
-)
+    uploaded_file.seek(0)
 
-def logistic_regression():
-    st.subheader("Logistic Regression Classifier")
-    st.write("Running Logistic Regression model...")
+    EXPECTED_COLUMNS = [
+    "age", "sex", "chest_pain_type", "resting_blood_pressure", "cholestoral",
+    "fasting_blood_sugar", "rest_ecg", "Max_heart_rate",
+    "exercise_induced_angina", "oldpeak", "slope",
+    "vessels_colored_by_flourosopy", "thalassemia"]
 
-def decision_tree():
-    st.subheader("Decision Tree Classifier")
-    st.write("Running Decision Tree Classifier...")
+    df = pd.read_csv(uploaded_file)
 
-def knn_classifier():
-    st.subheader("K-Nearest Neighbor Classifier")
-    st.write("Running KNN Classifier...")
+    missing_cols = [col for col in EXPECTED_COLUMNS if col not in df.columns]
+    extra_cols = [col for col in df.columns if col not in EXPECTED_COLUMNS]
 
-def naive_bayes():
-    st.subheader("Naive Bayes Classifier")
-    st.write("Running Naive Bayes (Gaussian / Multinomial)...")
+    if missing_cols or extra_cols:
+        st.error("❌ Wrong file uploaded!")
+        st.warning(f"Missing columns: {missing_cols}, Extra column: {extra_cols}")
+        st.stop()
 
-def random_forest():
-    st.subheader("Random Forest Classifier")
-    st.write("Running Random Forest model...")
+    @st.cache_resource
+    def load_model(path):
+        if not path:
+            return None
+        return joblib.load(path)
 
-def xgboost_model():
-    st.subheader("XGBoost Classifier")
-    st.write("Running XGBoost model...")
+    model_paths = {
+    "Logistic Regression": "saved_models/logistic_model.pkl",
+    "Decision Tree Classifier": "",
+    "K-Nearest Neighbor Classifier": "",
+    "Naive Bayes Classifier - Gaussian": "",
+    "Random Forest": "",
+    "XGBoost": "",
+    }
 
-# dropdown dispatcher
-model_dispatcher = {
-    "Logistic Regression": logistic_regression,
-    "Decision Tree Classifier": decision_tree,
-    "K-Nearest Neighbor Classifier": knn_classifier,
-    "Naive Bayes Classifier - Gaussian": naive_bayes,
-    "Ensemble Model - Random Forest": random_forest,
-    "Ensemble Model - XGBoost": xgboost_model
-}
+    st.markdown("<br>", unsafe_allow_html=True) 
 
-# Call selected model
-model_dispatcher[model_choice]()
+    model_choice = st.selectbox("Select Model", model_paths.keys())
+
+    model = load_model(model_paths[model_choice])
+
+    if model is None:
+        st.warning("Model not available yet.")
+    else :
+        X_test = df.copy() 
+        df2 = pd.read_csv("test_data/target.csv") 
+        y_test = df2.copy() 
+        y_pred = model.predict(X_test)
+
+        accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
+        mcc = matthews_corrcoef(y_test, y_pred)
+
+        # AUC (needs probabilities)
+        if hasattr(model, "predict_proba"):
+            y_prob = model.predict_proba(X_test)[:, 1]
+            auc = roc_auc_score(y_test, y_prob)
+        else:
+            auc = None
+
+        st.subheader(model_choice)
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Accuracy", f"{accuracy:.3f}")
+        col2.metric("Precision", f"{precision:.3f}")
+        col3.metric("Recall", f"{recall:.3f}")
+
+        col4, col5, col6 = st.columns(3)
+        col4.metric("F1 Score", f"{f1:.3f}")
+        col5.metric("MCC Score", f"{mcc:.3f}")
+        col6.metric("AUC Score", f"{auc:.3f}" if auc is not None else "N/A")
+
+        # Confusion Matrix
+        cm = confusion_matrix(y_test, y_pred)
+
+        fig, ax = plt.subplots(figsize=(1.2, 1.2), dpi=20)
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=ax)
+        ax.set_xlabel("Predicted Label", fontsize = 5)
+        ax.set_ylabel("True Label", fontsize = 5)
+        ax.set_title("Confusion Matrix", fontsize = 6)
+
+        # Reduce tick label sizes
+        ax.tick_params(axis='both', labelsize=7)
+
+        plt.tight_layout(pad=0.3)
+        st.pyplot(fig)

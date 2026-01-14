@@ -6,9 +6,7 @@ from sklearn.model_selection import train_test_split
 
 from preprocessing import get_preprocessor
 
-file_id = "1AnHrT9-13EI9lJgCg-6i_A-YQVP2dTka"
-url = f"https://drive.google.com/uc?id={file_id}&export=download"
-df = pd.read_csv(url)
+df = pd.read_csv("test_data/HeartDiseaseTrain-Test.csv")
 X = df.drop(columns=["target"])
 y = df["target"]
 
