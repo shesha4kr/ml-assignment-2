@@ -21,7 +21,7 @@ with col1:
 
 with col2:
 
-    file_path = "test_data/test_data_without_target.csv"
+    file_path = "data/test_data_without_target.csv"
 
     with open(file_path, "rb") as f:
         csv_data = f.read()
@@ -48,10 +48,7 @@ if uploaded_file:
     uploaded_file.seek(0)
 
     EXPECTED_COLUMNS = [
-    "age", "sex", "chest_pain_type", "resting_blood_pressure", "cholestoral",
-    "fasting_blood_sugar", "rest_ecg", "Max_heart_rate",
-    "exercise_induced_angina", "oldpeak", "slope",
-    "vessels_colored_by_flourosopy", "thalassemia"]
+    'age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_creatinine', 'serum_sodium', 'time', 'anaemia', 'diabetes', 'high_blood_pressure', 'sex', 'smoking']
 
     df = pd.read_csv(uploaded_file)
 
@@ -88,7 +85,7 @@ if uploaded_file:
         st.warning("Model not available yet.")
     else :
         X_test = df.copy() 
-        df2 = pd.read_csv("test_data/target.csv") 
+        df2 = pd.read_csv("data/test_target.csv") 
         y_test = df2.copy() 
         y_pred = model.predict(X_test)
 
