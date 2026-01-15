@@ -17,7 +17,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 col1, col2 = st.columns([2.5, 1.5])
 
 with col1:
-    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model. Don’t have one? Download a sample from the right.", type=None)
+    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model. Don’t have one? Download a sample by clicking on 'Download Test CSV'.", type=None)
 
 with col2:
 
@@ -70,9 +70,9 @@ if uploaded_file:
     "Logistic Regression": "saved_models/logistic_model.pkl",
     "Decision Tree Classifier": "saved_models/decision_tree_model.pkl",
     "K-Nearest Neighbor Classifier": "saved_models/knn_model.pkl",
-    "Naive Bayes Classifier - Gaussian": "",
-    "Random Forest": "",
-    "XGBoost": "",
+    "Naive Bayes Classifier - Gaussian": "saved_models/naive_bayes_model.pkl",
+    "Random Forest": "saved_models/random_forest_model.pkl",
+    "XGBoost": "saved_models/xgboost_model.pkl",
     }
 
     st.markdown("<br>", unsafe_allow_html=True) 
