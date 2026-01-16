@@ -19,7 +19,7 @@ https://www.kaggle.com/datasets/aadarshvelu/heart-failure-prediction-clinical-re
 - **Total Records:** 5000 
 - **Total Columns:** 13
 - **Input Features:** 12
-- **Target Column:** `target`
+- **Target Column:** `DEATH_EVENT`
 
 ### Attribute Details
 - **age**: age of the patient (years)
@@ -51,7 +51,7 @@ https://www.kaggle.com/datasets/aadarshvelu/heart-failure-prediction-clinical-re
 | XGBoost | 0.955 | 0.984 | 0.947 | 0.899 | 0.922 | 0.891 |
 
 
-## Observations on the Performnace
+## Observations on the Performance
 
 | ML Model Name | Observation about model performance |
 |-------------|-----------------------------------|
