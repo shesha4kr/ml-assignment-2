@@ -29,7 +29,7 @@ https://www.kaggle.com/datasets/aadarshvelu/heart-failure-prediction-clinical-re
 - **ejection fraction**: percentage of blood leaving the heart at each contraction (percentage)  
 - **high blood pressure**: if the patient has hypertension (boolean)
 - **platelets**: platelets in the blood (kiloplatelets/mL)
-- **sex**: woman or man (binary)
+- **sex**: female or male (binary)
 - **serum creatinine**: level of serum creatinine in the blood (mg/dL) 
 - **serum sodium**: level of serum sodium in the blood (mEq/L) 
 - **smoking**: woman or man (binary)
