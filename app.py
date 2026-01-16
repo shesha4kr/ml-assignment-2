@@ -6,7 +6,7 @@ from sklearn.metrics import (accuracy_score, roc_auc_score, precision_score,
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.set_page_config(page_title="My First Streamlit App", layout="centered")
+st.set_page_config(page_title="Heart Failure Risk Predictor", layout="centered")
 
 st.title("🫀 Heart Disease Risk Prediction")
 st.subheader("Different ML Model Performance Comparison")
