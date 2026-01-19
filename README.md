@@ -19,7 +19,7 @@ https://www.kaggle.com/datasets/aadarshvelu/heart-failure-prediction-clinical-re
 - **Total Records:** 5000 
 - **Total Columns:** 13
 - **Input Features:** 12
-- **Target Column:** `target`
+- **Target Column:** `DEATH_EVENT`
 
 ### Attribute Details
 - **age**: age of the patient (years)
@@ -29,7 +29,7 @@ https://www.kaggle.com/datasets/aadarshvelu/heart-failure-prediction-clinical-re
 - **ejection fraction**: percentage of blood leaving the heart at each contraction (percentage)  
 - **high blood pressure**: if the patient has hypertension (boolean)
 - **platelets**: platelets in the blood (kiloplatelets/mL)
-- **sex**: woman or man (binary)
+- **sex**: female or male (binary)
 - **serum creatinine**: level of serum creatinine in the blood (mg/dL) 
 - **serum sodium**: level of serum sodium in the blood (mEq/L) 
 - **smoking**: woman or man (binary)
@@ -51,7 +51,7 @@ https://www.kaggle.com/datasets/aadarshvelu/heart-failure-prediction-clinical-re
 | XGBoost | 0.955 | 0.984 | 0.947 | 0.899 | 0.922 | 0.891 |
 
 
-## Observations on the Performnace
+## Observations on the Performance
 
 | ML Model Name | Observation about model performance |
 |-------------|-----------------------------------|
