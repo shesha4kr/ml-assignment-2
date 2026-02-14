@@ -67,12 +67,12 @@ if uploaded_file:
         return joblib.load(path)
 
     model_paths = {
-    "Logistic Regression": "saved_models/logistic_model.pkl",
-    "Decision Tree Classifier": "saved_models/decision_tree_model.pkl",
-    "K-Nearest Neighbor Classifier": "saved_models/knn_model.pkl",
-    "Naive Bayes Classifier - Gaussian": "saved_models/naive_bayes_model.pkl",
-    "Random Forest": "saved_models/random_forest_model.pkl",
-    "XGBoost": "saved_models/xgboost_model.pkl",
+    "Logistic Regression": "model/logistic_model.pkl",
+    "Decision Tree Classifier": "model/decision_tree_model.pkl",
+    "K-Nearest Neighbor Classifier": "model/knn_model.pkl",
+    "Naive Bayes Classifier - Gaussian": "model/naive_bayes_model.pkl",
+    "Random Forest": "model/random_forest_model.pkl",
+    "XGBoost": "model/xgboost_model.pkl",
     }
 
     st.markdown("<br>", unsafe_allow_html=True) 
