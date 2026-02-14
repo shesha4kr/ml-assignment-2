@@ -89,41 +89,44 @@ if uploaded_file:
         y_test = df2.copy() 
         y_pred = model.predict(X_test)
 
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
-        mcc = matthews_corrcoef(y_test, y_pred)
+        c1, c2 = st.columns([3,3])
+        with c1:
 
-        # AUC (needs probabilities)
-        if hasattr(model, "predict_proba"):
-            y_prob = model.predict_proba(X_test)[:, 1]
-            auc = roc_auc_score(y_test, y_prob)
-        else:
-            auc = None
+            accuracy = accuracy_score(y_test, y_pred)
+            precision = precision_score(y_test, y_pred)
+            recall = recall_score(y_test, y_pred)
+            f1 = f1_score(y_test, y_pred)
+            mcc = matthews_corrcoef(y_test, y_pred)
 
-        st.subheader(model_choice)
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Accuracy", f"{accuracy:.3f}")
-        col2.metric("Precision", f"{precision:.3f}")
-        col3.metric("Recall", f"{recall:.3f}")
+            # AUC (needs probabilities)
+            if hasattr(model, "predict_proba"):
+                y_prob = model.predict_proba(X_test)[:, 1]
+                auc = roc_auc_score(y_test, y_prob)
+            else:
+                auc = None
 
-        col4, col5, col6 = st.columns(3)
-        col4.metric("F1 Score", f"{f1:.3f}")
-        col5.metric("MCC Score", f"{mcc:.3f}")
-        col6.metric("AUC Score", f"{auc:.3f}" if auc is not None else "N/A")
+            st.subheader(model_choice)
+            col1, col2 = st.columns(2)
+            col1.metric("Accuracy", f"{accuracy:.3f}")
+            col2.metric("Precision", f"{precision:.3f}")
 
-        # Confusion Matrix
-        cm = confusion_matrix(y_test, y_pred)
+            col3, col4 = st.columns(2)
+            col3.metric("Recall", f"{recall:.3f}")
+            col4.metric("F1 Score", f"{f1:.3f}")
 
-        fig, ax = plt.subplots(figsize=(1.2, 1.2), dpi=20)
-        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=ax)
-        ax.set_xlabel("Predicted Label", fontsize = 5)
-        ax.set_ylabel("True Label", fontsize = 5)
-        ax.set_title("Confusion Matrix", fontsize = 6)
+            col5, col6 = st.columns(2)
+            col5.metric("MCC Score", f"{mcc:.3f}")
+            col6.metric("AUC Score", f"{auc:.3f}" if auc is not None else "N/A")
 
-        # Reduce tick label sizes
-        ax.tick_params(axis='both', labelsize=7)
-
-        plt.tight_layout(pad=0.3)
-        st.pyplot(fig)
+        with c2:
+            # Confusion Matrix
+            cm = confusion_matrix(y_test, y_pred)
+            fig, ax = plt.subplots(figsize=(1.2, 1.2), dpi=20)
+            sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=ax)
+            ax.set_xlabel("Predicted Label", fontsize = 5)
+            ax.set_ylabel("True Label", fontsize = 5)
+            ax.set_title("Confusion Matrix", fontsize = 6)
+            # Reduce tick label sizes
+            ax.tick_params(axis='both', labelsize=7)
+            plt.tight_layout(pad=0.3)
+            st.pyplot(fig)
