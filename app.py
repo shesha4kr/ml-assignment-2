@@ -14,13 +14,13 @@ st.subheader("Different ML Model Performance Comparison")
 st.markdown("<br>", unsafe_allow_html=True) 
 
 # upload test.csv file and download options
-col1, col2 = st.columns([2.5, 1.5])
+col1, col2 = st.columns([3.5, 2])
 
 with col1:
-    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model. Don’t have one? Download a sample by clicking on 'Download Test CSV'.", type=None)
+    uploaded_file = st.file_uploader("Upload a CSV file to evaluate the model.", type=None)
 
 with col2:
-
+    st.text("Download a sample from here")
     file_path = "data/test_data_without_target.csv"
 
     with open(file_path, "rb") as f:
